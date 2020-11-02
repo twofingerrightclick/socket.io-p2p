@@ -17,10 +17,22 @@ function init () {
   var msgList = document.getElementById('msg-list')
   var upgradeMsg = document.getElementById('upgrade-msg')
 
+  var gameCodeButton = document.getElementById('game-code-button')
+  var gameCodeField = document.getElementById('game-code-field')
+
+  var gameRoomNameInput = document.getElementById('game-room-name-input')
+  var joinRoomButton = document.getElementById('join-room-button')
+  
+
   p2psocket.on('peer-msg', function (data) {
     var li = document.createElement('li')
     li.appendChild(document.createTextNode(data.textVal))
     msgList.appendChild(li)
+  })
+
+  p2psocket.on('ready', function () {
+    console.log('connected via P2P')
+
   })
 
   p2psocket.on('peer-file', function (data) {
@@ -57,6 +69,46 @@ function init () {
     box.value = ''
     boxFile.value = ''
   })
+
+
+// Game code 
+
+  gameCodeButton.addEventListener('click', function () {
+      p2psocket.emit('private-game-room-request')
+  })
+
+  p2psocket.on('game-room-request-complete', function (data) {
+    gameCodeField.textContent = data.gameRoomName
+  })
+
+
+  //click join by name
+  joinRoomButton.addEventListener('click', function () {
+   p2psocket.emit('join-private-game-room', {roomName: gameRoomNameInput.value })     
+  
+})
+
+
+p2psocket.on('private-game-ready-to-play', function () {
+  //p2psocket.usePeerConnection = true
+  form.style.visibility='visible';
+
+})
+
+
+p2psocket.on('disconnected-player', function () {
+  p2psocket._peers = {}
+})
+
+p2psocket.on('reconnected-player', function () {
+  //send game data back so they can contiunute playing
+})
+
+
+
+
+
+
 
   privateButton.addEventListener('click', function (e) {
     goPrivate()

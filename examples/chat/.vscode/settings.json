@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/a81eca9f-b854-4a1d-b0ca-70ca9788a9e7/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/CardGameServer",
+    "appService.deploySubpath": "."
+}
